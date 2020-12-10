@@ -43,7 +43,7 @@ namespace DogGo.Repositories
                             Name = reader.GetString(reader.GetOrdinal("Name")),
                             Address = reader.GetString(reader.GetOrdinal("Address")),
                             Phone = reader.GetString(reader.GetOrdinal("phone")),
-                            NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeigborhoodId"))
+                            NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId"))
                         };
                         owners.Add(owner);
                     }
