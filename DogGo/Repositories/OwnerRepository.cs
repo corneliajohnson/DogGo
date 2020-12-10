@@ -54,7 +54,7 @@ namespace DogGo.Repositories
             }
         }
 
-        public Owner GetWalkerById(int id)
+        public Owner GetOwnerById(int id)
         {
             using(SqlConnection conn = Connection)
             {
