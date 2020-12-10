@@ -6,7 +6,7 @@ using DogGo.Models;
 
 namespace DogGo.Repositories
 {
-    public class IOwnerRepository
+    public interface IOwnerRepository
     {
         List<Owner> GetAllOwners();
         Owner GetOwnerById(int id);
