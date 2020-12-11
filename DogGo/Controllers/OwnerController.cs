@@ -2,6 +2,7 @@
 using DogGo.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 
 namespace DogGo.Controllers
@@ -44,16 +45,19 @@ namespace DogGo.Controllers
         // POST: OwnerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Owner owner)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _ownerRepository.AddOwner(owner);
+
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(owner);
             }
+
         }
 
         // GET: OwnerController/Edit/5
