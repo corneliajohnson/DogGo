@@ -74,7 +74,7 @@ namespace DogGo.Repositories
 
                     SqlDataReader reader = cmd.ExecuteReader();
 
-                    if(reader.Read())
+                    if (reader.Read())
                     {
                         Owner owner = new Owner
                         {
@@ -85,6 +85,7 @@ namespace DogGo.Repositories
                             NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId"))
                         };
 
+                        //TO Do not showing all dogs ****Challenge Exercice****
                         List<Dog> dogs = new List<Dog>();
                         while(reader.Read())
                         {
