@@ -29,7 +29,7 @@ namespace DogGo.Repositories
                 conn.Open();
                 using(SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT Id, Name, Address, Phone, NeighborhoodId
+                    cmd.CommandText = @"SELECT Id, Name, Address, Phone, NeighborhoodId, Email
                                         FROM Owner";
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -43,6 +43,7 @@ namespace DogGo.Repositories
                             Name = reader.GetString(reader.GetOrdinal("Name")),
                             Address = reader.GetString(reader.GetOrdinal("Address")),
                             Phone = reader.GetString(reader.GetOrdinal("phone")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
                             NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId"))
                         };
                         owners.Add(owner);
@@ -65,10 +66,10 @@ namespace DogGo.Repositories
                     //                    FROM Owner
                     //                    WHERE Id = @id";
 
-                    cmd.CommandText = @"SELECT d.Name as DogName, Breed, o.Name as OwnerName, o.Id as OwnerId, Address, Phone, NeighborhoodId
+                    cmd.CommandText = @"SELECT d.Name as DogName, Breed, o.Name as OwnerName, o.Id as OwnerId, Address, Phone, NeighborhoodId, Email
                                                FROM Owner o
                                                JOIN Dog d ON d.OwnerId = o.Id AND o.Id = @id
-                                               GROUP BY d.Name, Breed, o.Name, o.Id,  Address, Phone, NeighborhoodId";
+                                               GROUP BY d.Name, Breed, o.Name, o.Id,  Address, Phone, NeighborhoodId, Email";
 
                     cmd.Parameters.AddWithValue("@id", id);
 
@@ -82,6 +83,7 @@ namespace DogGo.Repositories
                             Name = reader.GetString(reader.GetOrdinal("OwnerName")),
                             Address = reader.GetString(reader.GetOrdinal("Address")),
                             Phone = reader.GetString(reader.GetOrdinal("Phone")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
                             NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId"))
                         };
 
