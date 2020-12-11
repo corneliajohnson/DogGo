@@ -75,15 +75,15 @@ namespace DogGo.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Dog dog)
         {
-            //try
-            //{
+            try
+            {
                 _dogRepository.UpdateDog(dog);
                 return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View(dog);
-        //    }
+                }
+                catch
+                {
+                    return View(dog);
+             }
         }
 
         // GET: DogController/Delete/5
