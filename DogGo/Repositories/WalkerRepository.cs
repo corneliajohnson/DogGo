@@ -77,9 +77,7 @@ namespace DogGo.Repositories
                         SELECT w.Id, w.Name, ImageUrl, NeighborhoodId, n.Name as NeighborhoodName
                         FROM Walker w
                         JOIN Neighborhood n ON n.Id = NeighborhoodId
-                        WHERE w.Id = @id
-                        
-                    ";
+                        WHERE w.Id = @id";
 
                     cmd.Parameters.AddWithValue("@id", id);
 

@@ -29,8 +29,9 @@ namespace DogGo.Repositories
                 conn.Open();
                 using(SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT Id, Name, Address, Phone, NeighborhoodId, Email
-                                        FROM Owner";
+                    cmd.CommandText = @"SELECT o.Id, o.[Name], o.Email, o.Address, o.NeighborhoodId, o.Phone, n.[Name] as Neighborhood
+                                        FROM Owner o
+                                        JOIN Neighborhood n ON n.Id = NeighborhoodId";
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     List<Owner> owners = new List<Owner>();
@@ -44,7 +45,13 @@ namespace DogGo.Repositories
                             Address = reader.GetString(reader.GetOrdinal("Address")),
                             Phone = reader.GetString(reader.GetOrdinal("phone")),
                             Email = reader.GetString(reader.GetOrdinal("Email")),
-                            NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId"))
+                            NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId")),
+                            Neighborhood = new Neighborhood()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("NeighborhoodId")),
+                                Name = reader.GetString(reader.GetOrdinal("Neighborhood")),
+                            }
+
                         };
                         owners.Add(owner);
                     }
@@ -66,10 +73,11 @@ namespace DogGo.Repositories
                     //                    FROM Owner
                     //                    WHERE Id = @id";
 
-                    cmd.CommandText = @"SELECT d.Name as DogName, Breed, o.Name as OwnerName, o.Id as OwnerId, Address, Phone, NeighborhoodId, Email
+                    cmd.CommandText = @"SELECT d.Name as DogName, Breed, o.Name as OwnerName, o.Id as OwnerId, Address, Phone, Email, NeighborhoodId, n.[Name] as NeighborhoodName
                                                FROM Owner o
                                                JOIN Dog d ON d.OwnerId = o.Id AND o.Id = @id
-                                               GROUP BY d.Name, Breed, o.Name, o.Id,  Address, Phone, NeighborhoodId, Email";
+                                               JOIN Neighborhood n ON n.Id = NeighborhoodId
+                                               GROUP BY d.Name, Breed, o.Name, o.Id,  Address, Phone, NeighborhoodId, Email, n.Name";
 
                     cmd.Parameters.AddWithValue("@id", id);
 
@@ -84,7 +92,12 @@ namespace DogGo.Repositories
                             Address = reader.GetString(reader.GetOrdinal("Address")),
                             Phone = reader.GetString(reader.GetOrdinal("Phone")),
                             Email = reader.GetString(reader.GetOrdinal("Email")),
-                            NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId"))
+                            NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId")),
+                            Neighborhood = new Neighborhood()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("NeighborhoodId")),
+                                Name = reader.GetString(reader.GetOrdinal("NeighborhoodName")),
+                            }
                         };
 
                         //TO Do not showing all dogs ****Challenge Exercice****
