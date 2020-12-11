@@ -28,7 +28,7 @@ namespace DogGo.Controllers
         {
             Dog dog = _dogRepository.GetDogById(id);
 
-            if(dog == null)
+            if (dog == null)
             {
                 return NotFound();
             }
@@ -50,19 +50,19 @@ namespace DogGo.Controllers
             {
                 _dogRepository.AddDog(dog);
                 return RedirectToAction(nameof(Index));
-        }
+            }
             catch
             {
                 return View(dog);
-    }
-}
+            }
+        }
 
         // GET: DogController/Edit/5
         public ActionResult Edit(int id)
         {
             Dog dog = _dogRepository.GetDogById(id);
-            
-            if(dog == null)
+
+            if (dog == null)
             {
                 return NotFound();
             }
@@ -79,31 +79,37 @@ namespace DogGo.Controllers
             {
                 _dogRepository.UpdateDog(dog);
                 return RedirectToAction(nameof(Index));
-                }
-                catch
-                {
-                    return View(dog);
-             }
+            }
+            catch
+            {
+                return View(dog);
+            }
         }
 
         // GET: DogController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Dog dog = _dogRepository.GetDogById(id);
+            if (dog == null)
+            {
+                return NotFound();
+            }
+            return View(dog);
         }
 
         // POST: DogController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Dog dog)
         {
             try
             {
+                _dogRepository.DeleteDog(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(dog);
             }
         }
     }

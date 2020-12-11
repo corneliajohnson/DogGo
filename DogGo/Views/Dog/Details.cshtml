@@ -37,8 +37,15 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Notes)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Notes)
+        <dd class="col-sm-10">
+            @if (Model.Notes == null)
+            {
+                <p>N/A</p>
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.Notes)
+            }
         </dd>
     </dl>
 </div>

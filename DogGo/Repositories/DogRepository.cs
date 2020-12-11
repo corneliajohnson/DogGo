@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using DogGo.Repositories.Utils;
 
 namespace DogGo.Repositories
 {
@@ -28,7 +29,7 @@ namespace DogGo.Repositories
                 conn.Open();
                 using(SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT Id, Name, OwnerId, Breed, Notes
+                    cmd.CommandText = @"SELECT Id, Name, OwnerId, Breed, Notes, ImageUrl
                                         FROM Dog";
 
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -43,7 +44,9 @@ namespace DogGo.Repositories
                             Name = reader.GetString(reader.GetOrdinal("Name")),
                             OwnerId = reader.GetInt32(reader.GetOrdinal("OwnerId")),
                             Breed = reader.GetString(reader.GetOrdinal("Breed")),
-                        };
+                            Notes = ReaderUtlis.GetNullableString(reader, "Notes"),
+                            ImageUrl = ReaderUtlis.GetNullableString(reader, "ImageUrl")
+                    };
                         dogs.Add(dog);
                     }
                     reader.Close();
@@ -59,7 +62,7 @@ namespace DogGo.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT Id, Name, OwnerId, Breed, Notes
+                    cmd.CommandText = @"SELECT Id, Name, OwnerId, Breed, Notes, ImageUrl
                                         FROM Dog
                                         WHERE Id = @Id";
 
@@ -75,7 +78,8 @@ namespace DogGo.Repositories
                             Name = reader.GetString(reader.GetOrdinal("Name")),
                             OwnerId = reader.GetInt32(reader.GetOrdinal("OwnerId")),
                             Breed = reader.GetString(reader.GetOrdinal("Breed")),
-                            //Notes = reader.GetString(reader.GetOrdinal("Notes"))
+                            Notes = ReaderUtlis.GetNullableString(reader, "Notes"),
+                            ImageUrl = ReaderUtlis.GetNullableString(reader, "ImageUrl")
                         };
                         reader.Close();
                         return dog;
@@ -96,7 +100,7 @@ namespace DogGo.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO Dog ([Name], OwnerId, Breed, Notes)
+                    cmd.CommandText = @"INSERT INTO Dog ([Name], OwnerId, Breed, Notes, ImageUrl)
                                         OUTPUT INSERTED.ID
                                         VALUES(@name, @ownerId, @breed, @notes)";
 
