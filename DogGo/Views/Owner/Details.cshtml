@@ -35,20 +35,20 @@
             @Html.DisplayFor(model => model.Phone)
         </dd>
         <dt class="col-sm-2">
-            Neighborhood
+            @Html.DisplayNameFor(model => model.Neighborhood)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Neighborhood.Name)
         </dd>
-        @*<dt class="col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Dogs)
         </dt>
         <dd class="col-sm-10">
             @foreach (Dog dog in Model.Dogs)
             {
-                @Html.DisplayFor(modelItem => dog.Name)
+                <li class="list-unstyled">@dog.Name (@dog.Breed)</li>
             }
-            </dd>*@
+            </dd>
     </dl>
 </div>
 <div>

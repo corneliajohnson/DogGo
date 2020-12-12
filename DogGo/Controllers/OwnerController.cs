@@ -10,10 +10,12 @@ namespace DogGo.Controllers
     public class OwnerController : Controller
     {
         private readonly IOwnerRepository _ownerRepository;
+        private readonly IDogRepository _dogRepository;
 
-        public OwnerController(IOwnerRepository ownerRepository)
+        public OwnerController(IOwnerRepository ownerRepository, IDogRepository dogRepository)
         {
             _ownerRepository = ownerRepository;
+            _dogRepository = dogRepository;
         }
 
         // GET: OwnerController
@@ -27,6 +29,7 @@ namespace DogGo.Controllers
         public ActionResult Details(int id)
         {
             Owner owner = _ownerRepository.GetOwnerById(id);
+            owner.Dogs = _dogRepository.GetDogByOwnerId(id);
 
             if(owner == null)
             {

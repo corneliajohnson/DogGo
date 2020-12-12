@@ -24,10 +24,10 @@ namespace DogGo.Repositories
 
         public List<Dog> GetAllDogs()
         {
-            using(SqlConnection conn = Connection)
+            using (SqlConnection conn = Connection)
             {
                 conn.Open();
-                using(SqlCommand cmd = conn.CreateCommand())
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT Id, Name, OwnerId, Breed, Notes, ImageUrl
                                         FROM Dog";
@@ -36,7 +36,7 @@ namespace DogGo.Repositories
 
                     List<Dog> dogs = new List<Dog>();
 
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         Dog dog = new Dog
                         {
@@ -46,7 +46,7 @@ namespace DogGo.Repositories
                             Breed = reader.GetString(reader.GetOrdinal("Breed")),
                             Notes = ReaderUtlis.GetNullableString(reader, "Notes"),
                             ImageUrl = ReaderUtlis.GetNullableString(reader, "ImageUrl")
-                    };
+                        };
                         dogs.Add(dog);
                     }
                     reader.Close();
@@ -70,7 +70,7 @@ namespace DogGo.Repositories
 
                     SqlDataReader reader = cmd.ExecuteReader();
 
-                    if(reader.Read())
+                    if (reader.Read())
                     {
                         Dog dog = new Dog
                         {
@@ -162,6 +162,41 @@ namespace DogGo.Repositories
                     cmd.Parameters.AddWithValue("@Id", id);
 
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public List<Dog> GetDogByOwnerId(int ownerId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT Id, Name, OwnerId, Breed, Notes, ImageUrl
+                                        FROM Dog
+                                        WHERE OwnerId = @Id";
+
+                    cmd.Parameters.AddWithValue("@Id", ownerId);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    List<Dog> dogs = new List<Dog>();
+
+                    while (reader.Read())
+                    {
+                        Dog dog = new Dog
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
+                            OwnerId = reader.GetInt32(reader.GetOrdinal("OwnerId")),
+                            Breed = reader.GetString(reader.GetOrdinal("Breed")),
+                            Notes = ReaderUtlis.GetNullableString(reader, "Notes"),
+                            ImageUrl = ReaderUtlis.GetNullableString(reader, "ImageUrl")
+                        };
+                        dogs.Add(dog);
+                    }
+                    reader.Close();
+                    return dogs;
                 }
             }
         }

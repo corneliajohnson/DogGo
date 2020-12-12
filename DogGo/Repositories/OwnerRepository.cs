@@ -69,15 +69,10 @@ namespace DogGo.Repositories
                 conn.Open();
                 using(SqlCommand cmd = conn.CreateCommand())
                 {
-                    //cmd.CommandText = @"SELECT Id, Name, Address, Phone, NeighborhoodId
-                    //                    FROM Owner
-                    //                    WHERE Id = @id";
-
-                    cmd.CommandText = @"SELECT d.Name as DogName, Breed, o.Name as OwnerName, o.Id as OwnerId, Address, Phone, Email, NeighborhoodId, n.[Name] as NeighborhoodName
-                                               FROM Owner o
-                                               JOIN Dog d ON d.OwnerId = o.Id AND o.Id = @id
-                                               JOIN Neighborhood n ON n.Id = NeighborhoodId
-                                               GROUP BY d.Name, Breed, o.Name, o.Id,  Address, Phone, NeighborhoodId, Email, n.Name";
+                    cmd.CommandText = @"SELECT o.Id as OwnerId, o.Name as OwnerName, Address, Phone, Email, NeighborhoodId, n.Name as NeighborhoodName
+                                        FROM Owner o
+                                        JOIN Neighborhood n ON n.Id = NeighborhoodId
+                                        WHERE o.Id = @id";
 
                     cmd.Parameters.AddWithValue("@id", id);
 
@@ -99,21 +94,6 @@ namespace DogGo.Repositories
                                 Name = reader.GetString(reader.GetOrdinal("NeighborhoodName")),
                             }
                         };
-
-                        //TO Do not showing all dogs ****Challenge Exercice****
-                        //List<Dog> dogs = new List<Dog>();
-                        //while(reader.Read())
-                        //{
-                        //    Dog dog = new Dog
-                        //    {
-                        //        Name = reader.GetString(reader.GetOrdinal("DogName")),
-                        //        Breed = reader.GetString(reader.GetOrdinal("Breed")),
-                        //    };
-                        //    dogs.Add(dog);
-                        //}
-
-                        //owner.Dogs = dogs;
-
                         reader.Close();
                         return owner;
                     }
