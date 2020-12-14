@@ -39,8 +39,9 @@ namespace DogGo.Controllers
             WalkerProfileViewModel vm = new WalkerProfileViewModel
             {
                 Walks = walks,
-                Walker = walker
+                Walker = walker,
             };
+            vm.TotalWalkTime();
 
             return View(vm);
         }

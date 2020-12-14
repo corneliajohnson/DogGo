@@ -12,4 +12,29 @@
             <p>Neighborhood: @Model.Walker.Neighborhood.Name</p>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Client</th>
+                        <th scope="col">Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Walk walk in Model.Walks)
+                    {
+                        <tr>
+                            <td>@Html.Label(walk.Date.ToShortDateString()) </td>
+                            <td>@walk.Dog.Name</td>
+                            <td> @(@walk.Duration/60) mins</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">Total Walk Time @Model.TotalWalkTime()</div>
+    </div>
 </section>
