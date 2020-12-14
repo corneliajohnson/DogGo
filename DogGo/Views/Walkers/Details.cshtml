@@ -1,3 +1,15 @@
 ﻿@model DogGo.Models.ViewModels.WalkerProfileViewModel
 
 @{ ViewData["Title"] = "Profile"; }
+
+<h1 class="mb-4">@Model.Walker.Name</h1>
+
+<section class="container">
+    <div class="row">
+        <div class="col-3"><img src="@Model.Walker.ImageUrl" style="width:50px" /></div>
+        <div class="col-9">
+            <p>Name: @Model.Walker.Name</p>
+            <p>Neighborhood: @Model.Walker.Neighborhood.Name</p>
+        </div>
+    </div>
+</section>

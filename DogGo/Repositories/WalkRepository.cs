@@ -32,10 +32,11 @@ namespace DogGo.Repositories
                 conn.Open();
                 using(SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT wa.Id, Date, Duration, WalkerId, DogId, w.Name AS WalkerName, NeighborhoodId, w.ImageUrl, d.Name AS DogName, Breed
+                    cmd.CommandText = @"SELECT wa.Id, Date, Duration, WalkerId, DogId, w.Name AS WalkerName, NeighborhoodId, w.ImageUrl, d.Name AS DogName, Breed, n.Name AS NeighborhoodName
                                         FROM Walks wa
                                         JOIN Dog d ON d.Id = DogId
                                         JOIN Walker w ON w.Id = WalkerId
+                                        JOIN Neighborhood n ON n.Id = NeighborhoodId
                                         WHERE WalkerId = @walkerId";
 
                     cmd.Parameters.AddWithValue("@walkerId", walkerId);
@@ -62,7 +63,12 @@ namespace DogGo.Repositories
                             {
                                 Id = reader.GetInt32(reader.GetOrdinal("WalkerId")),
                                 Name = reader.GetString(reader.GetOrdinal("WalkerName")),
-                                NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId"))
+                                NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId")),
+                                Neighborhood = new Neighborhood
+                                {
+                                  Id = reader.GetInt32(reader.GetOrdinal("NeighborhoodId")),
+                                  Name = reader.GetString(reader.GetOrdinal("NeighborhoodName")),
+                                }
                             }
                         };
                         walks.Add(walk);
