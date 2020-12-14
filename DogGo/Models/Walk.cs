@@ -7,12 +7,12 @@ namespace DogGo.Models
 {
     public class Walk
     {
-        int Id { get; set; }
-        DateTime Date { get; set; }
-        int Duration { get; set; }
-        int WalkerId { get; set; }
-        Walker Walker { get; set; }
-        int DogId { get; set; }
-        Dog Dog { get; set; }
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        public int Duration { get; set; }
+        public int WalkerId { get; set; }
+        public Walker Walker { get; set; }
+        public int DogId { get; set; }
+        public Dog Dog { get; set; }
     }
 }

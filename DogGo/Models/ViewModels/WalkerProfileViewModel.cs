@@ -7,9 +7,8 @@ namespace DogGo.Models.ViewModels
 {
     public class WalkerProfileViewModel
     {
-        List<Walk> Walks { get; set; }
-        Walker Walker { get; set; }
-        string TotalWalkTime { get; set; }
+        public List<Walk> Walks { get; set; }
+        public Walker Walker { get; set; }
         
     }
 }
