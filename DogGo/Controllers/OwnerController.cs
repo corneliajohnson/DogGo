@@ -85,28 +85,35 @@ namespace DogGo.Controllers
         // GET: OwnerController/Edit/5
         public ActionResult Edit(int id)
         {
+            List<Neighborhood> neighborhoods = _neighborhoodRepository.GetAll();
             Owner owner = _ownerRepository.GetOwnerById(id);
+
+            OwnerFormViewModel vm = new OwnerFormViewModel()
+            {
+                Neighborhoods = neighborhoods,
+                Owner = owner
+            };
 
             if(owner == null)
             {
                 return NotFound();
             }
-            return View(owner);
+            return View(vm);
         }
 
         // POST: OwnerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Owner owner)
+        public ActionResult Edit(int id, OwnerFormViewModel vm)
         {
             try
             {
-                _ownerRepository.UpdateOwner(owner);
+                _ownerRepository.UpdateOwner(vm.Owner);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View(owner);
+                return View(vm);
             }
         }
 
