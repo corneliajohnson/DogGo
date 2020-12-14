@@ -3,6 +3,7 @@ using DogGo.Models.ViewModels;
 using DogGo.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 
@@ -13,12 +14,16 @@ namespace DogGo.Controllers
         private readonly IOwnerRepository _ownerRepository;
         private readonly IDogRepository _dogRepository;
         private IWalkerRepository _walkerRepository;
+        private INeighborhoodRepository _neighborhoodRepository;
 
-        public OwnerController(IOwnerRepository ownerRepository, IDogRepository dogRepository, IWalkerRepository walkerRepository)
+        // The constructor accepts an IConfiguration object as a parameter. This class comes from the ASP.NET framework and is useful for retrieving things out of the appsettings.json file like connection strings.
+        public OwnerController(IConfiguration config)
         {
-            _ownerRepository = ownerRepository;
-            _dogRepository = dogRepository;
-            _walkerRepository = walkerRepository;
+            _ownerRepository = new OwnerRepository(config);
+            _dogRepository = new DogRepository(config);
+            _walkerRepository = new WalkerRepository(config);
+            _neighborhoodRepository = new NeighborhoodRepository(config);
+
         }
 
         // GET: OwnerController
@@ -48,23 +53,31 @@ namespace DogGo.Controllers
         // GET: OwnerController/Create
         public ActionResult Create()
         {
-            return View();
+            List<Neighborhood> neighborhoods = _neighborhoodRepository.GetAll();
+
+            OwnerFormViewModel vm = new OwnerFormViewModel()
+            {
+                Owner = new Owner(),
+                Neighborhoods = neighborhoods
+            };
+
+            return View(vm);
         }
 
         // POST: OwnerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Owner owner)
+        public ActionResult Create(OwnerFormViewModel vm)
         {
             try
             {
-                _ownerRepository.AddOwner(owner);
+                _ownerRepository.AddOwner(vm.Owner);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View(owner);
+                return View(vm);
             }
 
         }
