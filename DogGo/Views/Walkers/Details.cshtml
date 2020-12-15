@@ -6,7 +6,16 @@
 
 <section class="container">
     <div class="row">
-        <div class="col-3"><img src="@Model.Walker.ImageUrl" style="width:50px" /></div>
+        <div class="col-3">
+            @if (@Model.Walker.ImageUrl != null)
+            {
+                <img src="@Model.Walker.ImageUrl" style="width:50px" />
+            }
+            else
+            {
+                <p>No Image</p>
+            }
+        </div>
         <div class="col-9">
             <p>Name: @Model.Walker.Name</p>
             <p>Neighborhood: @Model.Walker.Neighborhood.Name</p>
