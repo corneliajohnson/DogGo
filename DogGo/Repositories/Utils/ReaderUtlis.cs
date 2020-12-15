@@ -19,5 +19,10 @@ namespace DogGo.Repositories.Utils
                 return null;
             }
         }
+
+        public static object GetNullableParameter(object value)
+        {
+            return value ?? DBNull.Value;
+        }
     }
 }
