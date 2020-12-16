@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Linq;
 
 namespace DogGo.Controllers
 {
@@ -72,12 +73,20 @@ namespace DogGo.Controllers
         public ActionResult Edit(int id)
         {
             Dog dog = _dogRepository.GetDogById(id);
-
+            int ownerId = GetCurrentUserId();
+            List<Dog> userDogs = _dogRepository.GetDogByOwnerId(ownerId);
 
             if (dog == null)
             {
                 return NotFound();
             }
+
+           Dog foundDog = userDogs.Find(dog => dog.Id == id);
+            if(foundDog == null)
+            {
+                return NotFound();
+            }
+            
 
             return View(dog);
         }
