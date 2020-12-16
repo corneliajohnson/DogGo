@@ -81,13 +81,14 @@ namespace DogGo.Controllers
                 return NotFound();
             }
 
+            //check if dog in url is the user dog
            Dog foundDog = userDogs.Find(dog => dog.Id == id);
+
             if(foundDog == null)
             {
                 return NotFound();
             }
             
-
             return View(dog);
         }
 
@@ -112,10 +113,22 @@ namespace DogGo.Controllers
         public ActionResult Delete(int id)
         {
             Dog dog = _dogRepository.GetDogById(id);
+            int ownerId = GetCurrentUserId();
+            List<Dog> userDogs = _dogRepository.GetDogByOwnerId(ownerId);
+
             if (dog == null)
             {
                 return NotFound();
             }
+
+            //check if dog in url is the user dog
+            Dog foundDog = userDogs.Find(dog => dog.Id == id);
+
+            if (foundDog == null)
+            {
+                return NotFound();
+            }
+
             return View(dog);
         }
 
