@@ -43,29 +43,27 @@ namespace DogGo.Controllers
         // GET: DogController/Create
         public ActionResult Create()
         {
-            List<Owner> owners = _ownerRepository.GetAllOwners();
-
-            DogFormViewModel vm = new DogFormViewModel()
-            {
-                Dog = new Dog(),
-                Owners = owners,
-            };
-            return View(vm);
+            Dog dog = new Dog();
+            return View(dog);
         }
 
         // POST: DogController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(DogFormViewModel vm)
+        public ActionResult Create(Dog dog)
         {
             try
             {
-                _dogRepository.AddDog(vm.Dog);
-                return RedirectToAction(nameof(Index));
+                // update the dogs OwnerId to the current user's Id 
+                dog.OwnerId = GetCurrentUserId();
+
+                _dogRepository.AddDog(dog);
+
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                return View(vm);
+                return View(dog);
             }
         }
 
