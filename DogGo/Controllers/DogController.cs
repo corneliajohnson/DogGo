@@ -72,35 +72,30 @@ namespace DogGo.Controllers
         public ActionResult Edit(int id)
         {
             Dog dog = _dogRepository.GetDogById(id);
-            List<Owner> owners = _ownerRepository.GetAllOwners();
 
-            DogFormViewModel vm = new DogFormViewModel()
-            {
-                Dog = dog,
-                Owners = owners
-            };
 
             if (dog == null)
             {
                 return NotFound();
             }
 
-            return View(vm);
+            return View(dog);
         }
 
         // POST: DogController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, DogFormViewModel vm)
+        public ActionResult Edit(int id, Dog dog)
         {
             try
             {
-                _dogRepository.UpdateDog(vm.Dog);
+                dog.OwnerId = GetCurrentUserId();
+                _dogRepository.UpdateDog(dog);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View(vm);
+                return View(dog);
             }
         }
 
