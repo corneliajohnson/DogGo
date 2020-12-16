@@ -1,6 +1,7 @@
 ﻿using DogGo.Models;
 using DogGo.Models.ViewModels;
 using DogGo.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using System.Security.Claims;
 
 namespace DogGo.Controllers
 {
+    [Authorize]
     public class DogController : Controller
     {
         private readonly IDogRepository _dogRepository;
@@ -39,7 +41,6 @@ namespace DogGo.Controllers
             }
             return View(dog);
         }
-
         // GET: DogController/Create
         public ActionResult Create()
         {

@@ -33,7 +33,7 @@ namespace DogGo
             services.AddTransient<IWalkRepository, WalkRepository>();
             services.AddControllersWithViews();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => options.LoginPath = "/Owners/LogIn");
+                .AddCookie(options => options.LoginPath = "/Owner/LogIn");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
