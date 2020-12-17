@@ -26,7 +26,8 @@
 
     <div class="row">
         <section class="col-8 container mt-5">
-            <h1 class="text-left">Dogs</h1>
+            <h2 class="text-left">Dogs</h2>
+            <input type="button" class=" btn btn-success" value="Add Dog" onclick="location.href='@Url.Action("Create", "Dog")'" />
 
             <div class="row">
                 @foreach (Dog dog in Model.Dogs)
@@ -54,6 +55,15 @@
                             <div>
                                 <label class="font-weight-bold">Notes:</label>
                                 <p>@dog.Notes</p>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <input type="button" class=" btn btn-secondary" value="Edit Dog" onclick="location.href='@Url.Action("Edit", "Dog")' + '/@dog.Id'" />
+                                </div>
+                                <div class="col">
+                                    <input type="button" class=" btn btn-danger" value="Delete Dog" onclick="location.href='@Url.Action("Delete", "Dog")' +  '/@dog.Id'" />
+                                </div>
+
                             </div>
                         </div>
                     </div>
