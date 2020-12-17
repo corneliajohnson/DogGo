@@ -36,6 +36,11 @@ namespace DogGo.Controllers
         {
             Dog dog = _dogRepository.GetDogById(id);
 
+            if(dog.OwnerId != GetCurrentUserId())
+            {
+                return NotFound();
+            }
+
             if (dog == null)
             {
                 return NotFound();
@@ -76,7 +81,7 @@ namespace DogGo.Controllers
             int ownerId = GetCurrentUserId();
             List<Dog> userDogs = _dogRepository.GetDogByOwnerId(ownerId);
 
-            if (dog == null)
+            if (dog == null || dog.OwnerId != ownerId)
             {
                 return NotFound();
             }
@@ -113,6 +118,12 @@ namespace DogGo.Controllers
         public ActionResult Delete(int id)
         {
             Dog dog = _dogRepository.GetDogById(id);
+
+            if (dog.OwnerId != GetCurrentUserId())
+            {
+                return NotFound();
+            }
+
             int ownerId = GetCurrentUserId();
             List<Dog> userDogs = _dogRepository.GetDogByOwnerId(ownerId);
 
