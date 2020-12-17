@@ -96,6 +96,12 @@ namespace DogGo.Controllers
         // GET: OwnerController/Edit/5
         public ActionResult Edit(int id)
         {
+            int currentUser = GetCurrentUserId();
+            if (id != currentUser)
+            {
+                return NotFound();
+            }
+
             List<Neighborhood> neighborhoods = _neighborhoodRepository.GetAll();
             Owner owner = _ownerRepository.GetOwnerById(id);
 
@@ -131,6 +137,12 @@ namespace DogGo.Controllers
         // GET: OwnerController/Delete/5
         public ActionResult Delete(int id)
         {
+            int currentUser = GetCurrentUserId();
+            if (id != currentUser)
+            {
+                return NotFound();
+            }
+
             Owner owner = _ownerRepository.GetOwnerById(id);
 
             if (owner == null)
