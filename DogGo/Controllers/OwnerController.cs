@@ -41,6 +41,12 @@ namespace DogGo.Controllers
         // GET: OwnerController/Details/5
         public ActionResult Details(int id)
         {
+            int currentUser = GetCurrentUserId();
+            if (id != currentUser)
+            {
+                return NotFound();
+            }
+
             Owner owner = _ownerRepository.GetOwnerById(id);
             List<Dog> dogs = _dogRepository.GetDogByOwnerId(owner.Id);
             List<Walker> walkers = _walkerRepository.GetWalkersInNeighborhood(owner.NeighborhoodId);
