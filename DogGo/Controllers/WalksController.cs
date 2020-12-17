@@ -1,4 +1,5 @@
 ﻿using DogGo.Models;
+using DogGo.Models.ViewModels;
 using DogGo.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +15,12 @@ namespace DogGo.Controllers
     public class WalksController : Controller
     {
         private readonly IWalkRepository _walkRepo;
+        private readonly IWalkerRepository _walkerRepo;
 
-        public WalksController(IWalkRepository walksRepo)
+        public WalksController(IWalkRepository walksRepo, IWalkerRepository walkerRepo)
         {
             _walkRepo = walksRepo;
+            _walkerRepo = walkerRepo;
         }
 
         // GET: WalksController
@@ -37,9 +40,17 @@ namespace DogGo.Controllers
         {
             Walk walk = new Walk()
             {
+                //add walker from anynomous object passed in Owner/Detail
                 WalkerId = walkerId
             };
-            return View(walk);
+
+            Walker walker = _walkerRepo.GetWalkerById(walkerId);
+            WalksFormViewModel vm = new WalksFormViewModel()
+            {
+                Walker = walker,
+                Walk = walk
+            };
+            return View(vm);
         }
 
         // POST: WalksController/Create
@@ -49,6 +60,8 @@ namespace DogGo.Controllers
         {
             try
             {
+               Walker walker = _walkerRepo.GetWalkerById(walk.WalkerId);
+                walk.Walker = walker;
                 _walkRepo.AddWalk(walk);
             return RedirectToAction("Index", "Owner");
             }

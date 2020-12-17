@@ -1,4 +1,4 @@
-﻿@model DogGo.Models.Walk
+﻿@model DogGo.Models.ViewModels.WalksFormViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -6,29 +6,29 @@
 
 <h1>Create</h1>
 
-<h4>Walk</h4>
+<h4>Schedule a walk with @Model.Walker.Name</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
+                <label asp-for="Walk.Date" class="control-label"></label>
+                <input asp-for="Walk.Date" class="form-control" />
+                <span asp-validation-for="Walk.Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Duration" class="control-label"></label>
-                <input asp-for="Duration" class="form-control" />
-                <span asp-validation-for="Duration" class="text-danger"></span>
+                <label asp-for="Walk.Duration" class="control-label"></label>
+                <input asp-for="Walk.Duration" class="form-control" />
+                <span asp-validation-for="Walk.Duration" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input  type="hidden" asp-for="WalkerId" class="form-control" />
+                <input  type="hidden" asp-for="Walk.WalkerId" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="DogId" class="control-label"></label>
-                <input asp-for="DogId" class="form-control" />
-                <span asp-validation-for="DogId" class="text-danger"></span>
+                <label asp-for="Walk.DogId" class="control-label"></label>
+                <input asp-for="Walk.DogId" class="form-control" />
+                <span asp-validation-for="Walk.DogId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
