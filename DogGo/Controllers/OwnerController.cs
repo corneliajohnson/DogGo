@@ -1,12 +1,12 @@
 ﻿using DogGo.Models;
 using DogGo.Models.ViewModels;
 using DogGo.Repositories;
+using DogGo.Repositories.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -33,8 +33,9 @@ namespace DogGo.Controllers
         // GET: OwnerController
         public ActionResult Index()
         {
-            List<Owner> owners = _ownerRepository.GetAllOwners();
-            return View(owners);
+            int ownerId = GetCurrentUserId();
+
+            return RedirectToAction(nameof(Details), new { id = ownerId });
         }
 
         // GET: OwnerController/Details/5
@@ -98,7 +99,7 @@ namespace DogGo.Controllers
                 Owner = owner
             };
 
-            if(owner == null)
+            if (owner == null)
             {
                 return NotFound();
             }
@@ -126,7 +127,7 @@ namespace DogGo.Controllers
         {
             Owner owner = _ownerRepository.GetOwnerById(id);
 
-            if(owner == null)
+            if (owner == null)
             {
                 return NotFound();
             }
@@ -181,6 +182,11 @@ namespace DogGo.Controllers
                 new ClaimsPrincipal(claimsIdentity));
 
             return RedirectToAction("Index", "Dog");
+        }
+        private int GetCurrentUserId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }
