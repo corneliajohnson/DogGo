@@ -46,7 +46,8 @@ namespace DogGo.Controllers
             Walk walk = new Walk()
             {
                 //add walker from anynomous object passed in Owner/Detail
-                WalkerId = walkerId
+                WalkerId = walkerId,
+                Date = DateTime.Today
             };
 
             Walker walker = _walkerRepo.GetWalkerById(walkerId);
@@ -62,18 +63,20 @@ namespace DogGo.Controllers
         // POST: WalksController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Walk walk)
+        public ActionResult Create(WalksFormViewModel vm)
         {
             try
             {
-               Walker walker = _walkerRepo.GetWalkerById(walk.WalkerId);
-                walk.Walker = walker;
-                _walkRepo.AddWalk(walk);
-            return RedirectToAction("Index", "Owner");
+                Walker walker = _walkerRepo.GetWalkerById(vm.Walk.WalkerId);
+                vm.Walk.Walker = walker;
+                vm.Walk.Duration = vm.Walk.Duration * 60;
+                _walkRepo.AddWalk(vm.Walk);
+                return RedirectToAction("Index", "Owner");
+
             }
             catch
             {
-                return View(walk);
+                return View(vm);
             }
         }
 
