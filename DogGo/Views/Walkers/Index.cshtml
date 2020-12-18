@@ -16,6 +16,7 @@
                 <img src="@item.ImageUrl" alt="avatar"  class="card-img-top">
                 <div class="card-body">
                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                    <p class="card-text">Email: @Html.DisplayFor(modelItem => item.Email)</p>
                     <p class="card-text">Neighborhood: @Html.DisplayFor(modelItem => item.Neighborhood.Name)</p>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                     @Html.ActionLink("Details", "Details", new { id = item.Id }) |

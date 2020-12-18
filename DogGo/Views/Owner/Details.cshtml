@@ -25,14 +25,14 @@
     <div class="clearfix"></div>
 
     <div class="row">
-        <section class="col-8 container mt-5">
+        <section class="col-7">
             <h2 class="text-left">Dogs</h2>
             <input type="button" class=" btn btn-success" value="Add Dog" onclick="location.href='@Url.Action("Create", "Dog")'" />
 
             <div class="row">
                 @foreach (Dog dog in Model.Dogs)
                 {
-                    <div class="card m-4" style="width: 18rem;">
+                    <div class="card m-1" style="width: 18rem;">
                         @if (String.IsNullOrEmpty(dog.ImageUrl))
                         {
                             <img src="https://cdn.pixabay.com/photo/2018/08/15/13/12/dog-3608037_960_720.jpg"
@@ -63,7 +63,6 @@
                                 <div class="col">
                                     <input type="button" class=" btn btn-danger" value="Delete Dog" onclick="location.href='@Url.Action("Delete", "Dog")' +  '/@dog.Id'" />
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -71,8 +70,8 @@
             </div>
         </section>
 
-        <section class="col container mt-5">
-            <h1>Walkers Near Me</h1>
+        <section class="col-5">
+            <h4>Walkers Near Me</h4>
 
             <ul class="list-group mt-4">
                 @foreach (Walker walker in Model.Walkers)
@@ -85,7 +84,7 @@
                 }
             </ul>
 
-            <h1>Upcoming Walks</h1>
+            <h4 class="mt-5">Upcoming Walks</h4>
             <table class="table">
                 <thead>
                     <tr>
@@ -99,8 +98,8 @@
                     @foreach (Walk walk in Model.Walks)
                     {
                         <tr>
-                            <th>@walk.WalkerId</th>
-                            <td>@walk.DogId</td>
+                            <th>@walk.Walker.Name</th>
+                            <td>@walk.Dog.Name</td>
                             <td>@walk.Date</td>
                             <td>Pending</td>
                         </tr>
