@@ -77,13 +77,36 @@
             <ul class="list-group mt-4">
                 @foreach (Walker walker in Model.Walkers)
                 {
-                <li class="list-group-item">
-                    <img src="@walker.ImageUrl" style="width:50px" />
-                    <span class="font-weight-bold ml-4">@walker.Name</span>
-                    <input type="button" class="btn btn-secondary float-right" value="Schdule Walk" onclick="location.href='@Url.Action("Create", "Walks", new { walkerId = @walker.Id})'"/>
-                </li>
+                    <li class="list-group-item">
+                        <img src="@walker.ImageUrl" style="width:50px" />
+                        <span class="font-weight-bold ml-4">@walker.Name</span>
+                        <input type="button" class="btn btn-secondary float-right" value="Schdule Walk" onclick="location.href='@Url.Action("Create", "Walks", new { walkerId = @walker.Id})'" />
+                    </li>
                 }
             </ul>
+
+            <h1>Upcoming Walks</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Walker</th>
+                        <th scope="col">Dog</th>
+                        <th scope="col">Time & Date</th>
+                        <th scope="col">Confirmed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Walk walk in Model.Walks)
+                    {
+                        <tr>
+                            <th>@walk.WalkerId</th>
+                            <td>@walk.DogId</td>
+                            <td>@walk.Date</td>
+                            <td>Pending</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </section>
     </div>
 </div>

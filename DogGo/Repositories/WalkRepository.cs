@@ -102,5 +102,49 @@ namespace DogGo.Repositories
                 }
             }
         }
+
+        public List<Walk> GetWalksByOwnerId(int ownerId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT wa.Id, Date, Duration, WalkerId, DogId, d.OwnerId, o.Name AS OwnerName
+                                        FROM Walks wa
+                                        JOIN Dog d ON d.Id = DogId
+                                        JOIN Owner o ON o.Id = d.OwnerId
+                                        WHERE OwnerId = @ownerId";
+
+                    cmd.Parameters.AddWithValue("@ownerId", ownerId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Walk> walks = new List<Walk>();
+
+                    while (reader.Read())
+                    {
+                        Walk walk = new Walk
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Date = reader.GetDateTime(reader.GetOrdinal("Date")),
+                            Duration = reader.GetInt32(reader.GetOrdinal("Duration")),
+                            WalkerId = reader.GetInt32(reader.GetOrdinal("WalkerId")),
+                            DogId = reader.GetInt32(reader.GetOrdinal("DogId")),
+                            Dog = new Dog
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("DogId")),
+                            },
+                            Walker = new Walker
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("WalkerId")),
+                            }
+                        };
+                        walks.Add(walk);
+                    }
+                    reader.Close();
+                    return walks;
+                }
+            }
+        }
     }
 }
