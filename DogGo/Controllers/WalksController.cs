@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -16,11 +17,13 @@ namespace DogGo.Controllers
     {
         private readonly IWalkRepository _walkRepo;
         private readonly IWalkerRepository _walkerRepo;
+        private readonly IDogRepository _dogRepo;
 
-        public WalksController(IWalkRepository walksRepo, IWalkerRepository walkerRepo)
+        public WalksController(IWalkRepository walksRepo, IWalkerRepository walkerRepo, IDogRepository dogRepo)
         {
             _walkRepo = walksRepo;
             _walkerRepo = walkerRepo;
+            _dogRepo = dogRepo;
         }
 
         // GET: WalksController
@@ -38,6 +41,8 @@ namespace DogGo.Controllers
         // GET: WalksController/Create
         public ActionResult Create(int walkerId)
         {
+            int ownerId = GetCurrentUserId();
+            List<Dog> dogs = _dogRepo.GetDogByOwnerId(ownerId);
             Walk walk = new Walk()
             {
                 //add walker from anynomous object passed in Owner/Detail
@@ -48,7 +53,8 @@ namespace DogGo.Controllers
             WalksFormViewModel vm = new WalksFormViewModel()
             {
                 Walker = walker,
-                Walk = walk
+                Walk = walk,
+                Dogs = dogs
             };
             return View(vm);
         }
@@ -111,6 +117,11 @@ namespace DogGo.Controllers
             {
                 return View();
             }
+        }
+        private int GetCurrentUserId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }

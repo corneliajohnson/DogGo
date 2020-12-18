@@ -13,47 +13,54 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <form asp-action="Create">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <form asp-action="Create">
+                    <div class="row">
+                        <div class="col-2">
+                            <label asp-for="Walk.Date" class="control-label"></label>
+                        </div>
+                        <div class="col-10">
                             <div class="form-group">
-                                <label asp-for="Walk.Date" class="control-label"></label>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                                 <input asp-for="Walk.Date" class="form-control" />
                                 <span asp-validation-for="Walk.Date" class="text-danger"></span>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-6">
-                                    <label asp-for="Walk.Duration" class="control-label"></label>
-                                    <input asp-for="Walk.Duration" class="form-control" />
-                                    <span asp-validation-for="Walk.Duration" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <input type="hidden" asp-for="Walk.WalkerId" class="form-control" />
-                                </div>
-                                <div class="form-group col-6">
-                                    <label asp-for="Walk.DogId" class="control-label"></label>
-                                    <input asp-for="Walk.DogId" class="form-control" />
-                                    <span asp-validation-for="Walk.DogId" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <input type="submit" value="Add Walk" class="btn btn-primary" />
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
-
-                <div>
-                    <a asp-action="Index">Back to List</a>
-                </div>
-
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label asp-for="Walk.Duration" class="control-label"></label>
+                            <input asp-for="Walk.Duration" class="form-control" />
+                            <span asp-validation-for="Walk.Duration" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" asp-for="Walk.WalkerId" class="form-control" />
+                        </div>
+                        <div class="form-group col-6">
+                            <label asp-for="Walk.DogId" class="control-label"></label>
+                            <select asp-for="Walk.DogId" class="form-control">
+                                <option value="">Select Dog</option>
+                                @foreach (Dog dog in Model.Dogs)
+                                {
+                                    <option value="@dog.Id">@dog.Name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Walk.DogId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Add Walk" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
+    <div>
+        <a asp-action="Index">Back to List</a>
     </div>
 </div>
 
 
-        @section Scripts {
-            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        }
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
