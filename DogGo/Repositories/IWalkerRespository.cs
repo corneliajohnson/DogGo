@@ -12,5 +12,6 @@ namespace DogGo.Repositories
         void UpdateWalker(Walker walker);
         void AddWalker(Walker walker);
         void DeleteWalker(int id);
+        Walker GetWalkerByEmail(string email);
     }
 }

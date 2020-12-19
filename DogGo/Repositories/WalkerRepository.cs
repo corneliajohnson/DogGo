@@ -120,7 +120,7 @@ namespace DogGo.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                SELECT Id, [Name], ImageUrl, NeighborhoodId
+                SELECT Id, [Name], ImageUrl, Email, NeighborhoodId
                 FROM Walker
                 WHERE NeighborhoodId = @neighborhoodId
             ";
@@ -136,6 +136,7 @@ namespace DogGo.Repositories
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Name = reader.GetString(reader.GetOrdinal("Name")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
                             ImageUrl = reader.GetString(reader.GetOrdinal("ImageUrl")),
                             NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId"))
                         };
@@ -211,6 +212,51 @@ namespace DogGo.Repositories
                     cmd.Parameters.AddWithValue("@id", id);
 
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public Walker GetWalkerByEmail(string email)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT w.Id, w.Name, ImageUrl, Email, NeighborhoodId, n.Name as NeighborhoodName
+                        FROM Walker w
+                        JOIN Neighborhood n ON n.Id = NeighborhoodId
+                        WHERE w.Email = @email";
+
+                    cmd.Parameters.AddWithValue("@email", email);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        Walker walker = new Walker
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            ImageUrl = ReaderUtlis.GetNullableString(reader, "ImageUrl"),
+                            NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId"))
+                        };
+
+                        walker.Neighborhood = new Neighborhood()
+                        {
+                            Name = reader.GetString(reader.GetOrdinal("NeighborhoodName"))
+                        };
+
+                        reader.Close();
+                        return walker;
+                    }
+                    else
+                    {
+                        reader.Close();
+                        return null;
+                    }
                 }
             }
         }
