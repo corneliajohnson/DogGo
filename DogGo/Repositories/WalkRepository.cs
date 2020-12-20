@@ -32,11 +32,12 @@ namespace DogGo.Repositories
                 conn.Open();
                 using(SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT wa.Id, Date, Duration, IsPending, WalkerId, DogId, w.Name AS WalkerName, NeighborhoodId, w.ImageUrl, d.Name AS DogName, Breed, n.Name AS NeighborhoodName
+                    cmd.CommandText = @"SELECT wa.Id, Date, Duration, IsPending, IsExcepted, WalkerId, DogId, w.Name AS WalkerName, w.NeighborhoodId, w.ImageUrl, d.Name AS DogName, Breed, n.Name AS NeighborhoodName, o.Id AS OwnerId, o.Name AS OwnerName
                                         FROM Walks wa
                                         JOIN Dog d ON d.Id = DogId
                                         JOIN Walker w ON w.Id = WalkerId
-                                        JOIN Neighborhood n ON n.Id = NeighborhoodId
+                                        JOIN Owner o ON o.Id = d.OwnerId
+                                        JOIN Neighborhood n ON n.Id = w.NeighborhoodId
                                         WHERE WalkerId = @walkerId";
 
                     cmd.Parameters.AddWithValue("@walkerId", walkerId);
@@ -53,12 +54,18 @@ namespace DogGo.Repositories
                             Duration = reader.GetInt32(reader.GetOrdinal("Duration")),
                             WalkerId = reader.GetInt32(reader.GetOrdinal("WalkerId")),
                             IsPending = reader.GetBoolean(reader.GetOrdinal("IsPending")),
+                            IsExcepted = reader.GetBoolean(reader.GetOrdinal("IsExcepted")),
                             DogId = reader.GetInt32(reader.GetOrdinal("DogId")),
                             Dog = new Dog
                             {
                                 Id = reader.GetInt32(reader.GetOrdinal("DogId")),
                                 Name = reader.GetString(reader.GetOrdinal("DogName")),
-                                Breed = reader.GetString(reader.GetOrdinal("Breed"))
+                                Breed = reader.GetString(reader.GetOrdinal("Breed")), 
+                                Owner = new Owner
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("OwnerId")),
+                                    Name = reader.GetString(reader.GetOrdinal("OwnerName")),
+                                }
                             },
                             Walker = new Walker
                             {
@@ -111,7 +118,7 @@ namespace DogGo.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT wa.Id, Date, Duration, WalkerId, IsPending, w.Name As WalkerName, DogId, d.Name AS DogName, d.OwnerId, o.Name AS OwnerName
+                    cmd.CommandText = @"SELECT wa.Id, Date, Duration, WalkerId, IsPending, IsExcepted, w.Name As WalkerName, DogId, d.Name AS DogName, d.OwnerId, o.Name AS OwnerName
                                         FROM Walks wa
                                         JOIN Dog d ON d.Id = DogId
                                         JOIN Owner o ON o.Id = d.OwnerId
@@ -131,6 +138,7 @@ namespace DogGo.Repositories
                             Date = reader.GetDateTime(reader.GetOrdinal("Date")),
                             Duration = reader.GetInt32(reader.GetOrdinal("Duration")),
                             IsPending = reader.GetBoolean(reader.GetOrdinal("IsPending")),
+                            IsExcepted = reader.GetBoolean(reader.GetOrdinal("IsExcepted")),
                             WalkerId = reader.GetInt32(reader.GetOrdinal("WalkerId")),
                             DogId = reader.GetInt32(reader.GetOrdinal("DogId")),
                             Dog = new Dog

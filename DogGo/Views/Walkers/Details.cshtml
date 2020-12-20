@@ -22,6 +22,31 @@
         </div>
     </div>
 
+    <h3>Requested Walks</h3>
+    <div class="row mb-4">
+        @foreach (Walk walk in Model.Walks)
+        {
+            if (walk.IsExcepted == false)
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-text">Owner: @walk.Dog.Owner.Name</div>
+                        <div class="card-text">Dog: @walk.Dog.Name</div>
+                        <div class="card-text">Time: @walk.Date</div>
+                        <div class="row">
+                            <div class="col">
+                                <input type="button" class=" btn btn-secondary" value="Except" />
+                            </div>
+                            <div class="col">
+                                <input type="button" class=" btn btn-danger" value="Decline" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
     <div class="row">
         <div class="col-6 col-md-12">
             <table class="table">
@@ -37,20 +62,24 @@
                 <tbody>
                     @foreach (Walk walk in Model.Walks)
                     {
-                        <tr>
-                            <td>@Html.Label(walk.Date.ToShortDateString()) </td>
-                            <td>@walk.Dog.Name</td>
-                            <td> @(@walk.Duration/60) mins</td>
-                            <td>@walk.Date</td>
-                            @if (walk.IsPending)
-                            {
-                               <td>Yes</td> 
-                            }
-                            else 
-                            { 
-                                <td>No</td>
-                            }
-                        </tr>
+                        @if (walk.IsExcepted)
+                        {
+                            <tr>
+                                <td>@Html.Label(walk.Date.ToShortDateString()) </td>
+                                <td>@walk.Dog.Owner.Name (@walk.Dog.Name)</td>
+                                <td> @(@walk.Duration/60) mins</td>
+                                <td>@walk.Date</td>
+                                @if (walk.IsPending)
+                                {
+                                    <td>Yes</td>
+
+                                }
+                                else
+                                {
+                                    <td>No</td>
+                                }
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>

@@ -14,6 +14,7 @@ namespace DogGo.Models
         [Required]
         public int Duration { get; set; }
         public bool IsPending { get; set; }
+        public bool IsExcepted { get; set; }
         public int WalkerId { get; set; }
         public Walker Walker { get; set; }
         [Display(Prompt = "Dog")]
