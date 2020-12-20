@@ -32,8 +32,9 @@ namespace DogGo.Controllers
         // GET: WalkersController
         public ActionResult Index()
         {
-            int ownerId = GetCurrentUserId();
-            Owner owner = _ownerRepo.GetOwnerById(ownerId);
+            int currentUserId = GetCurrentUserId();
+            Owner owner = _ownerRepo.GetOwnerById(currentUserId);
+            Walker walker = _walkerRepo.GetWalkerById(currentUserId);
             List<Walker> walkers = new List<Walker>();
 
             if (owner != null)
@@ -41,7 +42,11 @@ namespace DogGo.Controllers
                 //only show walkers in user's neighborhood
                 walkers = _walkerRepo.GetWalkersInNeighborhood(owner.NeighborhoodId);
             }
-            else
+            if (walker != null)
+            {
+                walkers = _walkerRepo.GetWalkersInNeighborhood(walker.NeighborhoodId);
+            }
+            if(walker == null  && owner == null)
             {
                 walkers = _walkerRepo.GetAllWalkers();
             }
@@ -174,58 +179,5 @@ namespace DogGo.Controllers
                 return 0;
             }
         }
-
-        //public ActionResult Login()
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public async Task<ActionResult> Login(LoginViewModel viewModel)
-        //{
-        //    Walker walker = _walkerRepo.GetWalkerByEmail(viewModel.Email);
-        //    Owner owner = _ownerRepo.GetOwnerByEmail(viewModel.Email);
-
-        //    if (walker != null)
-        //    {
-        //        List<Claim> claims = new List<Claim>
-        //    {
-        //        new Claim(ClaimTypes.NameIdentifier, walker.Id.ToString()),
-        //        new Claim(ClaimTypes.Email, walker.Email),
-        //        new Claim(ClaimTypes.Role, "DogWalker"),
-        //    };
-
-        //        ClaimsIdentity claimsIdentity = new ClaimsIdentity(
-        //            claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-        //        await HttpContext.SignInAsync(
-        //            CookieAuthenticationDefaults.AuthenticationScheme,
-        //            new ClaimsPrincipal(claimsIdentity));
-
-        //        return RedirectToAction("Index", "Walkers");
-        //    }
-        //    else if(owner != null)
-        //    {
-        //        List<Claim> claims = new List<Claim>
-        //    {
-        //        new Claim(ClaimTypes.NameIdentifier, owner.Id.ToString()),
-        //        new Claim(ClaimTypes.Email, owner.Email),
-        //        new Claim(ClaimTypes.Role, "DogOwner"),
-        //    };
-
-        //        ClaimsIdentity claimsIdentity = new ClaimsIdentity(
-        //            claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-        //        await HttpContext.SignInAsync(
-        //            CookieAuthenticationDefaults.AuthenticationScheme,
-        //            new ClaimsPrincipal(claimsIdentity));
-
-        //        return RedirectToAction("Index", "Dog");
-        //    }
-        //    else
-        //    {
-        //        return Unauthorized();
-        //    }
-        //}
     }
 }
