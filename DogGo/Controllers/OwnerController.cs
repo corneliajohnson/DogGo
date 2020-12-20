@@ -173,53 +173,6 @@ namespace DogGo.Controllers
                 return View(owner);
             }
         }
-
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Login(LoginViewModel viewModel)
-        {
-            Owner owner = _ownerRepository.GetOwnerByEmail(viewModel.Email);
-            Walker walker = _walkerRepository.GetWalkerByEmail(viewModel.Email);
-
-            if (owner == null && walker == null)
-            {
-                return Unauthorized();
-            }
-
-            List<Claim> claims = new List<Claim>();
-            if (owner != null)
-            {
-                claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, owner.Id.ToString()),
-                new Claim(ClaimTypes.Email, owner.Email),
-                new Claim(ClaimTypes.Role, "DogOwner"),
-            };
-            }
-
-            if (walker != null)
-            {
-                claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, walker.Id.ToString()),
-                new Claim(ClaimTypes.Email, walker.Email),
-                new Claim(ClaimTypes.Role, "DogWalker"),
-            };
-            }
-
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(
-                claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity));
-
-            return RedirectToAction("Index", "Home");
-        }
         private int GetCurrentUserId()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);

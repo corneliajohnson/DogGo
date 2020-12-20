@@ -111,7 +111,7 @@ namespace DogGo.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT wa.Id, Date, Duration, WalkerId, w.Name As WalkerName, DogId, d.Name AS DogName, d.OwnerId, o.Name AS OwnerName
+                    cmd.CommandText = @"SELECT wa.Id, Date, Duration, WalkerId, IsPending, w.Name As WalkerName, DogId, d.Name AS DogName, d.OwnerId, o.Name AS OwnerName
                                         FROM Walks wa
                                         JOIN Dog d ON d.Id = DogId
                                         JOIN Owner o ON o.Id = d.OwnerId
