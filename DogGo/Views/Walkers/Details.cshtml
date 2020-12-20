@@ -23,13 +23,15 @@
     </div>
 
     <div class="row">
-        <div class="col-6">
+        <div class="col-6 col-md-12">
             <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">Date</th>
                         <th scope="col">Client</th>
                         <th scope="col">Duration</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Completed</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,11 +41,20 @@
                             <td>@Html.Label(walk.Date.ToShortDateString()) </td>
                             <td>@walk.Dog.Name</td>
                             <td> @(@walk.Duration/60) mins</td>
+                            <td>@walk.Date</td>
+                            @if (walk.IsPending)
+                            {
+                               <td>Yes</td> 
+                            }
+                            else 
+                            { 
+                                <td>No</td>
+                            }
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
-        <div class="col-6">Total Walk Time @Model.TotalWalkTime()</div>
+        <div class="col-6 col-md-12">Total Walk Time @Model.TotalWalkTime()</div>
     </div>
 </section>

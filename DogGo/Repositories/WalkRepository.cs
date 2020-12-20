@@ -32,7 +32,7 @@ namespace DogGo.Repositories
                 conn.Open();
                 using(SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT wa.Id, Date, Duration, WalkerId, DogId, w.Name AS WalkerName, NeighborhoodId, w.ImageUrl, d.Name AS DogName, Breed, n.Name AS NeighborhoodName
+                    cmd.CommandText = @"SELECT wa.Id, Date, Duration, IsPending, WalkerId, DogId, w.Name AS WalkerName, NeighborhoodId, w.ImageUrl, d.Name AS DogName, Breed, n.Name AS NeighborhoodName
                                         FROM Walks wa
                                         JOIN Dog d ON d.Id = DogId
                                         JOIN Walker w ON w.Id = WalkerId
@@ -52,6 +52,7 @@ namespace DogGo.Repositories
                             Date = reader.GetDateTime(reader.GetOrdinal("Date")),
                             Duration = reader.GetInt32(reader.GetOrdinal("Duration")),
                             WalkerId = reader.GetInt32(reader.GetOrdinal("WalkerId")),
+                            IsPending = reader.GetBoolean(reader.GetOrdinal("IsPending")),
                             DogId = reader.GetInt32(reader.GetOrdinal("DogId")),
                             Dog = new Dog
                             {
@@ -86,9 +87,9 @@ namespace DogGo.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    INSERT INTO Walks (Date, Duration, WalkerId, DogId)
+                    INSERT INTO Walks (Date, Duration, WalkerId, DogId, IsPending)
                     OUTPUT INSERTED.ID
-                    VALUES (@date, @duration, @walkerId, @dogId);
+                    VALUES (@date, @duration, @walkerId, @dogId, 'FALSE');
                 ";
 
                     cmd.Parameters.AddWithValue("@date", walk.Date);
@@ -129,6 +130,7 @@ namespace DogGo.Repositories
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Date = reader.GetDateTime(reader.GetOrdinal("Date")),
                             Duration = reader.GetInt32(reader.GetOrdinal("Duration")),
+                            IsPending = reader.GetBoolean(reader.GetOrdinal("IsPending")),
                             WalkerId = reader.GetInt32(reader.GetOrdinal("WalkerId")),
                             DogId = reader.GetInt32(reader.GetOrdinal("DogId")),
                             Dog = new Dog
